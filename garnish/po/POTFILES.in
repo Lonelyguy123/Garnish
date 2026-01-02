@@ -1,0 +1,8 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
+data/org.codeberg.spaciouscoder78.garnish.desktop.in
+data/org.codeberg.spaciouscoder78.garnish.metainfo.xml.in
+data/org.codeberg.spaciouscoder78.garnish.gschema.xml
+src/main.py
+src/window.py
+src/window.blp

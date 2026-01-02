@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=garnish
+Exec=garnish
+Icon=org.codeberg.spaciouscoder78.garnish
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=GTK;
+StartupNotify=true
+DBusActivatable=true

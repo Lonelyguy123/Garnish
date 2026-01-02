@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.codeberg.spaciouscoder78.garnish
+Exec=@bindir@/garnish --gapplication-service
