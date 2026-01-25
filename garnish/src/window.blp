@@ -34,7 +34,8 @@ template $GarnishWindow: Adw.ApplicationWindow {
       child: Adw.ToolbarView {
 
         content: Adw.StatusPage {
-          title: _("");
+          title: _("Recipes");
+          description: _("You can navigate between cuisines and different recipes from here");
 
           Adw.Clamp {
     maximum-size: 360;
@@ -44,6 +45,7 @@ template $GarnishWindow: Adw.ApplicationWindow {
       spacing: 0;
 
       ScrolledWindow {
+        margin-top: 50;
         height-request: 40000;
         has-frame: true;
 
