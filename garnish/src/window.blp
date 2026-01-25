@@ -37,6 +37,8 @@ template $GarnishWindow: Adw.ApplicationWindow {
           title: _("Recipes");
           description: _("You can navigate between cuisines and different recipes from here");
 
+
+
           Adw.Clamp {
     maximum-size: 360;
 
@@ -44,16 +46,19 @@ template $GarnishWindow: Adw.ApplicationWindow {
       orientation: vertical;
       spacing: 0;
 
-      ScrolledWindow {
-        margin-top: 50;
-        height-request: 40000;
+      Button make_newc{
+        label : _("Create new Cuisine drop down");
+        }
+
+      ScrolledWindow scrolled_window {
+        margin-top: 30;
+        height-request: 20000;
         has-frame: true;
 
-        child: ListView list_view {
-          factory: SignalListItemFactory item_factory {};
-
-          header-factory: SignalListItemFactory header_factory {};
-        };
+        Box menu {
+         orientation : vertical;
+         spacing : 8;
+        }
       }
 
 
@@ -65,21 +70,41 @@ template $GarnishWindow: Adw.ApplicationWindow {
     };
 
     content: Adw.NavigationPage {
-      title: _("Content");
-      tag: "content";
+  child: Adw.ToolbarView {
 
-      child: Adw.ToolbarView {
+    content: Stack content_stack {
+      transition-type: crossfade;
 
-        content: Adw.StatusPage {
-          title: _("Content");
+      // REAL CONTENT (top-aligned)
+      Box main_content {
+        orientation: vertical;
+        spacing: 12;
 
+        Box {
+          hexpand: true;
+          css-classes: ["card"];
+          spacing: 16;
 
-        };
-      };
+          Label {
+            label: "Aloo Fry";
+            halign: center;
+            css-classes: ["title-1"];
+          }
+        }
+
+      }
+
+      Adw.StatusPage empty_state {
+        title: _("No Recipes");
+        description: _("Add your first recipe to get started");
+      }
     };
   };
 };
+};
+};
 }
+
 
 menu primary_menu {
   section {
