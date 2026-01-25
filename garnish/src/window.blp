@@ -1,6 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
+
 template $GarnishWindow: Adw.ApplicationWindow {
   title : _("Garnish");
   width-request: 360;
@@ -75,21 +76,34 @@ template $GarnishWindow: Adw.ApplicationWindow {
     content: Stack content_stack {
       transition-type: crossfade;
 
-      // REAL CONTENT (top-aligned)
       Box main_content {
         orientation: vertical;
         spacing: 12;
 
         Box {
           hexpand: true;
-          css-classes: ["card"];
-          spacing: 16;
+          css-classes : ["tall_box"];
+          spacing: 12;
 
           Label {
-            label: "Aloo Fry";
+            label: "Recipe-1";
+            hexpand: true;
             halign: center;
-            css-classes: ["title-1"];
           }
+        }
+        Box{ //Wrapping the ingredients box in another box as if we halign the parent container to the start (main_content) - the Recipe-1 Box also strictly stays to the left which we want to avoid
+        halign : start;
+        Box{
+        vexpand: true;
+        css-classes : ["ingredients"];
+        spacing:12;
+        Label {
+           label: "Ingredients";
+           hexpand: true;
+           valign: start;
+           halign: center;
+           }
+        }
         }
 
       }

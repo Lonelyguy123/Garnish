@@ -5,7 +5,7 @@ import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Gtk, Gio, Adw, Gdk
 from .window import GarnishWindow
 
 class GarnishApplication(Adw.Application):
@@ -61,8 +61,20 @@ class GarnishApplication(Adw.Application):
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
+def load_css():
+    provider = Gtk.CssProvider()
+    provider.load_from_path("style.css")
+
+    Gtk.StyleContext.add_provider_for_display(
+    Gdk.Display.get_default(),
+    provider,
+    Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
+)
+
+
 
 def main(version):
+    load_css()
     """The application's entry point."""
     app = GarnishApplication()
     return app.run(sys.argv)
