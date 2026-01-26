@@ -104,9 +104,30 @@ template $GarnishWindow: Adw.ApplicationWindow {
            halign: center;
            }
         }
+        Box {
+        vexpand: true;
+        css-classes : ["Process"];
+        spacing:12;
+        Label{
+        label: "Process";
+        hexpand:true;
+        valign:start;
+        halign:center;
         }
-
-      }
+        }
+        Box{
+        vexpand: true;
+        css-classes : ["Tips"];
+        spacing:12;
+        Label{
+        label: "Tips";
+        hexpand:true;
+        valign:start;
+        halign:center;
+        }
+        }
+}
+}
 
       Adw.StatusPage empty_state {
         title: _("No Recipes");
