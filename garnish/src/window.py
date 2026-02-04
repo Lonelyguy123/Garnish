@@ -41,8 +41,35 @@ class GarnishWindow(Adw.ApplicationWindow):
         new_recipe = Adw.ActionRow(title="New Recipe")
         new_recipe.set_activatable(True)
         new_recipe.connect("activated", self.on_recipe_clicked)
+        edit_btn = Gtk.Button(icon_name="edit-symbolic")
+        edit_btn.add_css_class("flat")
+
+        new_recipe.add_suffix(edit_btn)
+        edit_btn.connect("clicked",self.on_edit_recipe,new_recipe)
 
         expander.add_row(new_recipe)
+
+    def on_edit_recipe(self,_btn, new_recipe):
+        entry = Gtk.Entry(text=new_recipe.get_title())
+
+        dialog = Adw.AlertDialog(
+        heading = "Edit Recipe",
+        body = "Change the recipe name",
+        )
+
+        dialog.set_extra_child(entry)
+        dialog.add_response("cancel","Cancel")
+        dialog.add_response("save","Save")
+        dialog.set_default_response("save")
+
+        def on_response(new, response):
+           if response=='save':
+                new_name = entry.get_text().strip()
+                if new_name:
+                   new_recipe.set_title(new_name)
+
+        dialog.connect("response",on_response)
+        dialog.present(self)
 
 
     def on_recipe_clicked(self, row):

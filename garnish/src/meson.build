@@ -45,6 +45,7 @@ garnish_sources = [
   '__init__.py',
   'main.py',
   'window.py',
+  'database.py'
 ]
 
 install_data(garnish_sources, install_dir: moduledir)
