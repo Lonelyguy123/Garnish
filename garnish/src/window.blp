@@ -100,6 +100,7 @@ template $GarnishWindow: Adw.ApplicationWindow {
         Box{
         vexpand: true;
         css-classes : ["ingredients"];
+        orientation: vertical; //for all children to stack on top of each other
         spacing:12;
         Label {
            label: "Ingredients";
@@ -108,10 +109,26 @@ template $GarnishWindow: Adw.ApplicationWindow {
            valign: start;
            halign: center;
            }
+        ScrolledWindow {
+                vexpand: true;
+                height-request: 150;
+                has-frame: true;
+
+                /* The actual editable text area */
+                TextView ingredients_view {
+                    css-classes : ["ingredients_view"];
+                    wrap-mode: word;
+                    top-margin: 12;
+                    bottom-margin: 12;
+                    left-margin: 12;
+                    right-margin: 12;
+                }
+                }
         }
         Box {
         vexpand: true;
         css-classes : ["Process"];
+        orientation: vertical;
         spacing:12;
         Label{
         label: "Process";
@@ -119,20 +136,52 @@ template $GarnishWindow: Adw.ApplicationWindow {
         valign:start;
         halign:center;
         }
+           ScrolledWindow {
+                vexpand: true;
+                height-request: 150;
+                has-frame: true;
+
+                /* The actual editable text area */
+                TextView process_view {
+                    css-classes : ["process_view"];
+                    wrap-mode: word;
+                    top-margin: 12;
+                    bottom-margin: 12;
+                    left-margin: 12;
+                    right-margin: 12;
+                }
+                }
         }
         Box{
         vexpand: true;
         css-classes : ["Tips"];
+        orientation : vertical;
         spacing:12;
         Label{
         label: "Tips";
         hexpand:true;
         valign:start;
         halign:center;
+                }
+        ScrolledWindow {
+                vexpand: true;
+                height-request: 150;
+                has-frame: true;
+
+                /* The actual editable text area */
+                TextView tips_view {
+                    css-classes : ["tips_view"];
+                    wrap-mode: word;
+                    top-margin: 12;
+                    bottom-margin: 12;
+                    left-margin: 12;
+                    right-margin: 12;
+                }
+        }
         }
         }
 }
-}
+
 
       Adw.StatusPage empty_state {
         title: _("No Recipes");

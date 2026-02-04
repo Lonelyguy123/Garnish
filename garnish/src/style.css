@@ -26,4 +26,20 @@ color: black;
 font-size: 30px;
 min-width: 500px;
 }
+.process_view,
+.ingredients_view,
+.tips_view {
+    font-size: 25px;
+    background-color: transparent; /* Blends with the parent container */
 
+    /* A subtle bottom border to show it's an input field */
+    border-bottom: 2px solid alpha(@window_fg_color, 0.1);
+}
+
+/* Highlight the bottom border when you click inside */
+.process_view:focus,
+.ingredients_view:focus,
+.tips_view:focus {
+    border-bottom: 2px solid @accent_color;
+    transition: all 200ms ease-in-out;
+}
