@@ -9,12 +9,17 @@ class GarnishWindow(Adw.ApplicationWindow):
 
     make_newc= Gtk.Template.Child()
     menu = Gtk.Template.Child()
+    delete_data = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.db = DatabaseManager()
         self.make_newc.connect("clicked",self.on_start_clicked)
+        self.delete_data.connect("clicked",self.deletedata)
         self.load_initial_data()
+
+    def deletedata(self,button):
+        self.db.delete()
 
     def load_initial_data(self):
         cuisines = self.db.get_cuisines()
@@ -45,25 +50,39 @@ class GarnishWindow(Adw.ApplicationWindow):
 
         self.menu.append(expander)
 
+        #getting recipes for current cuisine_id which have been added before
+        recipes = self.db.get_recipes(cuisine_id)
+        for recipe_id, recipe_name in recipes:
+            row = self.create_recipe_row(recipe_id, recipe_name)
+            expander.add_row(row)
+
     def on_start_clicked(self, _button):
-        #Lets get the number of unique recipes so far
-        num_unique = self.db.get_num_recipes()
-        Cuisine_id = num_unique+1
-        Cuisine_name = "Cuisine " + str(Cuisine_id)
-        self.db.add_to_cuisine(Cuisine_name)
-        self.populate_container(Cuisine_name,Cuisine_id)
+        cuisine_name = f"Cuisine {self.db.get_num_cuisines() + 1}"
+        cid = self.db.add_to_cuisine(cuisine_name)   # return lastrowid
+        self.populate_container(cuisine_name, cid)
+
 
     def on_add_recipe_clicked(self, row, expander):
-        new_recipe = Adw.ActionRow(title="New Recipe")
-        new_recipe.set_activatable(True)
-        new_recipe.connect("activated", self.on_recipe_clicked)
+        cid = expander.cid
+        recipe_id = self.db.add_to_recipe("New Recipe", cid)
+
+        new_row = self.create_recipe_row(recipe_id, "New Recipe")
+        expander.add_row(new_row)
+
+
+    def create_recipe_row(self, recipe_id, recipe_name):
+        row = Adw.ActionRow(title=recipe_name)
+        row.recipe_id = recipe_id
+        row.set_activatable(True)
+        row.connect("activated", self.on_recipe_clicked)
+
         edit_btn = Gtk.Button(icon_name="edit-symbolic")
         edit_btn.add_css_class("flat")
+        row.add_suffix(edit_btn)
+        edit_btn.connect("clicked", self.on_edit_recipe, row)
 
-        new_recipe.add_suffix(edit_btn)
-        edit_btn.connect("clicked",self.on_edit_recipe,new_recipe)
+        return row
 
-        expander.add_row(new_recipe)
 
     def on_edit_recipe(self,_btn, new_recipe):
         entry = Gtk.Entry(text=new_recipe.get_title())
