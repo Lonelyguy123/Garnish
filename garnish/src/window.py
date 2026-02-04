@@ -53,7 +53,7 @@ class GarnishWindow(Adw.ApplicationWindow):
         #getting recipes for current cuisine_id which have been added before
         recipes = self.db.get_recipes(cuisine_id)
         for recipe_id, recipe_name in recipes:
-            row = self.create_recipe_row(recipe_id, recipe_name)
+            row = self.create_recipe_row(recipe_id, recipe_name, cuisine_id)
             expander.add_row(row)
 
     def on_start_clicked(self, _button):
@@ -66,12 +66,16 @@ class GarnishWindow(Adw.ApplicationWindow):
         cid = expander.cid
         recipe_id = self.db.add_to_recipe("New Recipe", cid)
 
-        new_row = self.create_recipe_row(recipe_id, "New Recipe")
+        new_row = self.create_recipe_row(recipe_id, "New Recipe",cid)
         expander.add_row(new_row)
 
 
-    def create_recipe_row(self, recipe_id, recipe_name):
+    def create_recipe_row(self, recipe_id, recipe_name,cid):
         row = Adw.ActionRow(title=recipe_name)
+        '''
+        We can attach arbitary arguments like cid and recipe_id to row and pass the row object as one
+        '''
+        row.cid = cid
         row.recipe_id = recipe_id
         row.set_activatable(True)
         row.connect("activated", self.on_recipe_clicked)
@@ -84,8 +88,8 @@ class GarnishWindow(Adw.ApplicationWindow):
         return row
 
 
-    def on_edit_recipe(self,_btn, new_recipe):
-        entry = Gtk.Entry(text=new_recipe.get_title())
+    def on_edit_recipe(self,_btn, row):
+        entry = Gtk.Entry(text=row.get_title())
 
         dialog = Adw.AlertDialog(
         heading = "Edit Recipe",
@@ -101,7 +105,8 @@ class GarnishWindow(Adw.ApplicationWindow):
            if response=='save':
                 new_name = entry.get_text().strip()
                 if new_name:
-                   new_recipe.set_title(new_name)
+                   row.set_title(new_name)
+                   self.db.update_recipe(row.recipe_id,row.cid,new_name)
 
         dialog.connect("response",on_response)
         dialog.present(self)

@@ -80,3 +80,7 @@ class DatabaseManager:
          self.cursor.execute("UPDATE Cuisines SET name = ? WHERE id = ?",(new_name,cid))
          self.conn.commit()
 
+    def update_recipe(self,recipe_id,cid,new_name):
+         self.cursor.execute("UPDATE Recipes SET name = ? WHERE id = ? AND cuisine_id = ?",(new_name,recipe_id,cid))
+         self.conn.commit()
+
