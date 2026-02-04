@@ -29,39 +29,24 @@ class DatabaseManager:
         ''')
         self.conn.commit()
 
-    # --- Cuisine Methods ---
-    def add_cuisine(self, name):
-        try:
-            self.cursor.execute('INSERT INTO Cuisines (name) VALUES (?)', (name,))
-            self.conn.commit()
-            return self.cursor.lastrowid # Return the ID of the new cuisine
-        except sqlite3.IntegrityError:
-            return None # Cuisine already exists
+    def get_num_recipes(self):
+         #counting number of unique recipes
+         self.cursor.execute("SELECT MAX(id) FROM Cuisines")
 
-    def get_all_cuisines(self):
-        self.cursor.execute('SELECT id, name FROM Cuisines')
-        return self.cursor.fetchall()
-    
-    def update_cuisine_name(self, old_name, new_name):
-        self.cursor.execute('UPDATE Cuisines SET name = ? WHERE name = ?', (new_name, old_name))
-        self.conn.commit()
+         result = self.cursor.fetchone()
 
-    # --- Recipe Methods ---
-    def add_recipe(self, cuisine_id, name):
-        self.cursor.execute('''
-            INSERT INTO Recipes (cuisine_id, name, ingredients, process, tips)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (cuisine_id, name, "", "", "")) # Initialize empty fields
-        self.conn.commit()
-        return self.cursor.lastrowid
+         return result[0]
+    def add_to_cuisine(self,name):
+         self.cursor.execute(
+         "INSERT INTO Cuisines (name) VALUES (?)",
+         (name,))
+         self.conn.commit()
 
-    def update_recipe_name(self, recipe_id, new_name):
-        self.cursor.execute('UPDATE Recipes SET name = ? WHERE id = ?', (new_name, recipe_id))
-        self.conn.commit()
+    def get_cuisines(self):
+         self.cursor.execute("SELECT * FROM Cuisines ORDER BY id")
+         return self.cursor.fetchall()
 
-    def get_recipes_by_cuisine(self, cuisine_id):
-        self.cursor.execute('SELECT id, name FROM Recipes WHERE cuisine_id = ?', (cuisine_id,))
-        return self.cursor.fetchall()
-    
-    def close(self):
-        self.conn.close()
+    def update_cuisine(self,cid,new_name):
+         self.cursor.execute("UPDATE Cuisines SET name = ? WHERE id = ?",(new_name,cid))
+         self.conn.commit()
+

@@ -1,6 +1,7 @@
 
 from gi.repository import Adw
 from gi.repository import Gtk
+from .database import DatabaseManager
 
 @Gtk.Template(resource_path='/org/codeberg/spaciouscoder78/garnish/window.ui')
 class GarnishWindow(Adw.ApplicationWindow):
@@ -11,13 +12,23 @@ class GarnishWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.db = DatabaseManager()
         self.make_newc.connect("clicked",self.on_start_clicked)
+        self.load_initial_data()
 
-    def populate_container(self, cuisine_name):
+    def load_initial_data(self):
+        cuisines = self.db.get_cuisines()
+        for (id, cuisine) in cuisines:
+            self.populate_container(cuisine,id)
+
+    def populate_container(self, cuisine_name,cuisine_id):
         expander = Adw.ExpanderRow(
             title=cuisine_name,
             expanded=False,
         )
+        expander.cid = cuisine_id
+
+        # for every expander, we store its cuisine_id
 
         add_row = Adw.ActionRow(title="➕ Add Recipe")
         add_row.set_activatable(True)
@@ -35,7 +46,12 @@ class GarnishWindow(Adw.ApplicationWindow):
         self.menu.append(expander)
 
     def on_start_clicked(self, _button):
-        self.populate_container("FirstCuisine")
+        #Lets get the number of unique recipes so far
+        num_unique = self.db.get_num_recipes()
+        Cuisine_id = num_unique+1
+        Cuisine_name = "Cuisine " + str(Cuisine_id)
+        self.db.add_to_cuisine(Cuisine_name)
+        self.populate_container(Cuisine_name,Cuisine_id)
 
     def on_add_recipe_clicked(self, row, expander):
         new_recipe = Adw.ActionRow(title="New Recipe")
@@ -76,6 +92,7 @@ class GarnishWindow(Adw.ApplicationWindow):
         print("Selected recipe:", row.get_title())
 
     def on_edit_cuisine(self, _btn, expander):
+        cid = expander.cid
         entry = Gtk.Entry(text=expander.get_title())
 
         dialog = Adw.AlertDialog(
@@ -93,7 +110,8 @@ class GarnishWindow(Adw.ApplicationWindow):
                 new_name = entry.get_text().strip()
                 if new_name:
                     expander.set_title(new_name)
-                    # TODO: update DB here
+                    # updating cuisine name
+                    self.db.update_cuisine(cid,new_name)
 
         dialog.connect("response", on_response)
         dialog.present(self)
