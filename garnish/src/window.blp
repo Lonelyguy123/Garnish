@@ -89,7 +89,7 @@ template $GarnishWindow: Adw.ApplicationWindow {
           css-classes : ["tall_box"];
           spacing: 12;
 
-          Label {
+          Label recipe{
             label: "Recipe-1";
             hexpand: true;
             halign: center;
@@ -117,7 +117,7 @@ template $GarnishWindow: Adw.ApplicationWindow {
                 /* The actual editable text area */
                 TextView ingredients_view {
                     css-classes : ["ingredients_view"];
-                    wrap-mode: word;
+                    wrap-mode: word_char; /*This makes sure that the words and characters wrap to the next line after reaching the end of the box*/
                     top-margin: 12;
                     bottom-margin: 12;
                     left-margin: 12;
@@ -144,7 +144,7 @@ template $GarnishWindow: Adw.ApplicationWindow {
                 /* The actual editable text area */
                 TextView process_view {
                     css-classes : ["process_view"];
-                    wrap-mode: word;
+                    wrap-mode: word_char;
                     top-margin: 12;
                     bottom-margin: 12;
                     left-margin: 12;
@@ -171,7 +171,7 @@ template $GarnishWindow: Adw.ApplicationWindow {
                 /* The actual editable text area */
                 TextView tips_view {
                     css-classes : ["tips_view"];
-                    wrap-mode: word;
+                    wrap-mode: word_char;
                     top-margin: 12;
                     bottom-margin: 12;
                     left-margin: 12;

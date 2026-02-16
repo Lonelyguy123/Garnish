@@ -84,3 +84,15 @@ class DatabaseManager:
          self.cursor.execute("UPDATE Recipes SET name = ? WHERE id = ? AND cuisine_id = ?",(new_name,recipe_id,cid))
          self.conn.commit()
 
+    def update_info(self,recipe_id,cid,ingredients,process,tips):
+         self.cursor.execute("UPDATE Recipes SET ingredients = ?,process = ?,tips = ? WHERE id = ? and cuisine_id = ?",(ingredients,process,tips,recipe_id,cid))
+         print("Data saved")
+         self.conn.commit()
+
+    def get_info(self,recipe_id,cid):
+         self.cursor.execute("SELECT ingredients,process,tips,name FROM Recipes WHERE id = ? and cuisine_id = ?",(recipe_id,cid))
+         return self.cursor.fetchone()
+
+    def set_recipe_name(self,name,recipe_id,cid):
+         self.cursor.execute()
+

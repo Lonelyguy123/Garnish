@@ -10,6 +10,10 @@ class GarnishWindow(Adw.ApplicationWindow):
     make_newc= Gtk.Template.Child()
     menu = Gtk.Template.Child()
     delete_data = Gtk.Template.Child()
+    ingredients_view = Gtk.Template.Child()
+    process_view = Gtk.Template.Child()
+    tips_view = Gtk.Template.Child()
+    recipe = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -80,6 +84,11 @@ class GarnishWindow(Adw.ApplicationWindow):
         row.set_activatable(True)
         row.connect("activated", self.on_recipe_clicked)
 
+        edit_info_btn = Gtk.Button(icon_name="document-edit-symbolic")
+        edit_info_btn.add_css_class("flat")
+        row.add_suffix(edit_info_btn)
+        edit_info_btn.connect("clicked",self.on_save_info, row)
+
         edit_btn = Gtk.Button(icon_name="edit-symbolic")
         edit_btn.add_css_class("flat")
         row.add_suffix(edit_btn)
@@ -107,13 +116,57 @@ class GarnishWindow(Adw.ApplicationWindow):
                 if new_name:
                    row.set_title(new_name)
                    self.db.update_recipe(row.recipe_id,row.cid,new_name)
+                   self.recipe.set_text(new_name)
 
         dialog.connect("response",on_response)
         dialog.present(self)
 
+    def on_save_info(self,_btn, row):
+        dialog = Adw.AlertDialog(
+        heading = "Save",
+        body = "Save recipe info",
+        )
+
+        dialog.add_response("cancel","Cancel")
+        dialog.add_response("save","Save")
+        dialog.set_default_response("save")
+
+        def on_response(new, response):
+            if response=='save':
+                inbuffer = self.ingredients_view.get_buffer()
+                start_iter = inbuffer.get_start_iter()
+                end_iter = inbuffer.get_end_iter()
+                intext = inbuffer.get_text(start_iter, end_iter, True)
+
+                probuffer = self.process_view.get_buffer()
+                start_iter = probuffer.get_start_iter()
+                end_iter = probuffer.get_end_iter()
+                protext = probuffer.get_text(start_iter, end_iter, True)
+
+                tipbuffer = self.tips_view.get_buffer()
+                start_iter = tipbuffer.get_start_iter()
+                end_iter = tipbuffer.get_end_iter()
+                tiptext = tipbuffer.get_text(start_iter, end_iter, True)
+
+                self.db.update_info(row.cid,row.recipe_id,intext,protext,tiptext)
+        dialog.connect("response",on_response)
+        dialog.present(self)
+
+
 
     def on_recipe_clicked(self, row):
-        print("Selected recipe:", row.get_title())
+         data = self.db.get_info(row.recipe_id,row.cid)
+         ingredients = data[0]
+         process = data[1]
+         tips = data[2]
+         recipe_name = data[3]
+         inbuffer = self.ingredients_view.get_buffer()
+         probuffer = self.process_view.get_buffer()
+         tipbuffer = self.tips_view.get_buffer()
+         inbuffer.set_text(ingredients)
+         probuffer.set_text(process)
+         tipbuffer.set_text(tips)
+         self.recipe.set_text(recipe_name)
 
     def on_edit_cuisine(self, _btn, expander):
         cid = expander.cid
