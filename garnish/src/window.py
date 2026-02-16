@@ -86,8 +86,11 @@ class GarnishWindow(Adw.ApplicationWindow):
 
         edit_info_btn = Gtk.Button(icon_name="document-edit-symbolic")
         edit_info_btn.add_css_class("flat")
+        edit_info_btn.set_visible(False)
         row.add_suffix(edit_info_btn)
         edit_info_btn.connect("clicked",self.on_save_info, row)
+
+        row.save_btn = edit_info_btn
 
         edit_btn = Gtk.Button(icon_name="edit-symbolic")
         edit_btn.add_css_class("flat")
@@ -155,6 +158,12 @@ class GarnishWindow(Adw.ApplicationWindow):
 
 
     def on_recipe_clicked(self, row):
+         if hasattr(self, "active_row"):
+            self.active_row.save_btn.set_visible(False)
+
+         row.save_btn.set_visible(True)
+         self.active_row = row
+
          data = self.db.get_info(row.recipe_id,row.cid)
          ingredients = data[0]
          process = data[1]
