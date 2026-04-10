@@ -34,10 +34,10 @@ class GarnishApplication(Adw.Application):
         """Callback for the app.about action."""
         about = Adw.AboutDialog(application_name='garnish',
                                 application_icon='org.codeberg.spaciouscoder78.garnish',
-                                developer_name='Lonelyguy123',
+                                developer_name='Lonelyguy123 & spaciouskarter78',
                                 version='0.1.0',
-                                developers=['Lonelyguy123'],
-                                copyright='© 2026 Lonelyguy123')
+                                developers=['Lonelyguy123','spaciouskarter78'],
+                                copyright='© 2026 Lonelyguy123 & spaciouskarter78')
         # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
         about.set_translator_credits(_('translator-credits'))
         about.present(self.props.active_window)

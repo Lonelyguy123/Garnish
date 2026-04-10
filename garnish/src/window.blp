@@ -6,8 +6,8 @@ template $GarnishWindow: Adw.ApplicationWindow {
   title : _("Garnish");
   width-request: 360;
   height-request: 200;
-  default-width: 640;
-  default-height: 480;
+  default-width: 860;
+  default-height: 720;
 
   Adw.Breakpoint {
     condition ("max-width: 400sp")
@@ -16,182 +16,234 @@ template $GarnishWindow: Adw.ApplicationWindow {
       split_view.collapsed: true;
     }
   }
+
   content: Adw.ToolbarView {
-  [top]
-  Adw.HeaderBar {
-  [end]
-   MenuButton {
-     primary: true;
-     icon-name : "open-menu-symbolic";
-     tooltip-text: _("Main Menu");
-     menu-model: primary_menu;
-   }
-}
-  content: Adw.NavigationSplitView split_view {
-    sidebar: Adw.NavigationPage {
-      title: _("Sidebar");
-      tag: "sidebar";
 
-      child: Adw.ToolbarView {
-
-        content: Adw.StatusPage {
-          title: _("Recipes");
-          description: _("You can navigate between cuisines and different recipes from here");
-
-
-
-          Adw.Clamp {
-    maximum-size: 360;
-
-    Box {
-      orientation: vertical;
-      spacing: 0;
-
-      Button make_newc{
-        label : _("Create new Cuisine drop down");
-        }
-
-      Button delete_data{
-        label : _("Delete all data");
-        }
-
-      ScrolledWindow scrolled_window {
-        margin-top: 30;
-        height-request: 20000;
-        has-frame: true;
-
-        Box menu {
-         orientation : vertical;
-         spacing : 8;
-        }
+    [top]
+    Adw.HeaderBar {
+      [end]
+      MenuButton {
+        primary: true;
+        icon-name: "open-menu-symbolic";
+        tooltip-text: _("Main Menu");
+        menu-model: primary_menu;
       }
-
-
     }
-  }
 
+    content: Adw.NavigationSplitView split_view {
+
+      sidebar: Adw.NavigationPage {
+        title: _("Sidebar");
+        tag: "sidebar";
+
+        child: Adw.ToolbarView {
+          content: ScrolledWindow {
+            vexpand: true;
+            hscrollbar-policy: never;
+
+            Adw.Clamp {
+              maximum-size: 360;
+              tightening-threshold: 200;
+
+              Box {
+                orientation: vertical;
+                spacing: 12;
+                margin-top: 12;
+                margin-bottom: 12;
+                margin-start: 12;
+                margin-end: 12;
+
+                Label {
+                  label: _("Recipes");
+                  css-classes: ["title-2"];
+                  halign: center;
+                }
+
+                Label {
+                  label: _("Navigate between cuisines and recipes here");
+                  wrap: true;
+                  halign: center;
+                  css-classes: ["dim-label"];
+                }
+
+                Button make_newc {
+                  label: _("Create new Cuisine");
+                  halign: fill;
+                }
+
+                Button delete_data {
+                  label: _("Delete all data");
+                  halign: fill;
+                  css-classes: ["destructive-action"];
+                }
+
+                ScrolledWindow scrolled_window {
+                  vexpand: true;
+                  height-request: 200;
+                  has-frame: true;
+
+                  Box menu {
+                    orientation: vertical;
+                    spacing: 8;
+                    margin-top: 8;
+                    margin-bottom: 8;
+                    margin-start: 8;
+                    margin-end: 8;
+                  }
+                }
+              }
+            }
+          };
+        };
+      };
+
+      content: Adw.NavigationPage {
+        child: Adw.ToolbarView {
+
+          content: Stack content_stack {
+            transition-type: crossfade;
+
+            /* Main recipe content page */
+            ScrolledWindow main_content {
+              hscrollbar-policy: never;
+              vexpand: true;
+
+              Adw.Clamp {
+                maximum-size: 800;
+                tightening-threshold: 500;
+
+                Box {
+                  orientation: vertical;
+                  spacing: 16;
+                  margin-top: 16;
+                  margin-bottom: 16;
+                  margin-start: 16;
+                  margin-end: 16;
+
+                  /* Recipe title row */
+                  Box {
+                    orientation: horizontal;
+                    hexpand: true;
+                    spacing: 12;
+
+                    Label recipe {
+                      label: "Recipe-1";
+                      hexpand: true;
+                      halign: center;
+                      css-classes: ["title-1"];
+                    }
+                  }
+
+                  /* Ingredients section */
+                  Box {
+                    orientation: vertical;
+                    spacing: 8;
+                    css-classes: ["card"];
+
+                    Label {
+                      label: _("Ingredients");
+                      css-classes: ["title-3"];
+                      halign: center;
+                      margin-top: 12;
+                    }
+
+                    ScrolledWindow {
+                      hexpand: true;
+                      height-request: 120;
+                      has-frame: false;
+                      margin-start: 8;
+                      margin-end: 8;
+                      margin-bottom: 8;
+
+                      TextView ingredients_view {
+                        css-classes: ["ingredients_view"];
+                        wrap-mode: word_char;
+                        top-margin: 12;
+                        bottom-margin: 12;
+                        left-margin: 12;
+                        right-margin: 12;
+                      }
+                    }
+                  }
+
+                  /* Process section */
+                  Box {
+                    orientation: vertical;
+                    spacing: 8;
+                    css-classes: ["card"];
+
+                    Label {
+                      label: _("Process");
+                      css-classes: ["title-3"];
+                      halign: center;
+                      margin-top: 12;
+                    }
+
+                    ScrolledWindow {
+                      hexpand: true;
+                      height-request: 120;
+                      has-frame: false;
+                      margin-start: 8;
+                      margin-end: 8;
+                      margin-bottom: 8;
+
+                      TextView process_view {
+                        css-classes: ["process_view"];
+                        wrap-mode: word_char;
+                        top-margin: 12;
+                        bottom-margin: 12;
+                        left-margin: 12;
+                        right-margin: 12;
+                      }
+                    }
+                  }
+
+                  /* Tips section */
+                  Box {
+                    orientation: vertical;
+                    spacing: 8;
+                    css-classes: ["card"];
+
+                    Label {
+                      label: _("Tips");
+                      css-classes: ["title-3"];
+                      halign: center;
+                      margin-top: 12;
+                    }
+
+                    ScrolledWindow {
+                      hexpand: true;
+                      height-request: 120;
+                      has-frame: false;
+                      margin-start: 8;
+                      margin-end: 8;
+                      margin-bottom: 8;
+
+                      TextView tips_view {
+                        css-classes: ["tips_view"];
+                        wrap-mode: word_char;
+                        top-margin: 12;
+                        bottom-margin: 12;
+                        left-margin: 12;
+                        right-margin: 12;
+                      }
+                    }
+                  }
+
+                }
+              }
+            }
+
+            /* Empty state page */
+            Adw.StatusPage empty_state {
+              title: _("No Recipes");
+              description: _("Add your first recipe to get started");
+            }
+          };
         };
       };
     };
-
-    content: Adw.NavigationPage {
-  child: Adw.ToolbarView {
-
-    content: Stack content_stack {
-      transition-type: crossfade;
-
-      Box main_content {
-        orientation: vertical;
-        spacing: 12;
-
-        Box {
-          hexpand: true;
-          css-classes : ["tall_box"];
-          spacing: 12;
-
-          Label recipe{
-            label: "Recipe-1";
-            hexpand: true;
-            halign: center;
-          }
-        }
-        Box{ //Wrapping the ingredients box in another box as if we halign the parent container to the start (main_content) - the Recipe-1 Box also strictly stays to the left which we want to avoid
-        halign : start;
-        Box{
-        vexpand: true;
-        css-classes : ["ingredients"];
-        orientation: vertical; //for all children to stack on top of each other
-        spacing:12;
-        Label {
-           label: "Ingredients";
-           css-classes : ["ingred-title"];
-           hexpand: true;
-           valign: start;
-           halign: center;
-           }
-        ScrolledWindow {
-                vexpand: true;
-                height-request: 150;
-                has-frame: true;
-
-                /* The actual editable text area */
-                TextView ingredients_view {
-                    css-classes : ["ingredients_view"];
-                    wrap-mode: word_char; /*This makes sure that the words and characters wrap to the next line after reaching the end of the box*/
-                    top-margin: 12;
-                    bottom-margin: 12;
-                    left-margin: 12;
-                    right-margin: 12;
-                }
-                }
-        }
-        Box {
-        vexpand: true;
-        css-classes : ["Process"];
-        orientation: vertical;
-        spacing:12;
-        Label{
-        label: "Process";
-        hexpand:true;
-        valign:start;
-        halign:center;
-        }
-           ScrolledWindow {
-                vexpand: true;
-                height-request: 150;
-                has-frame: true;
-
-                /* The actual editable text area */
-                TextView process_view {
-                    css-classes : ["process_view"];
-                    wrap-mode: word_char;
-                    top-margin: 12;
-                    bottom-margin: 12;
-                    left-margin: 12;
-                    right-margin: 12;
-                }
-                }
-        }
-        Box{
-        vexpand: true;
-        css-classes : ["Tips"];
-        orientation : vertical;
-        spacing:12;
-        Label{
-        label: "Tips";
-        hexpand:true;
-        valign:start;
-        halign:center;
-                }
-        ScrolledWindow {
-                vexpand: true;
-                height-request: 150;
-                has-frame: true;
-
-                /* The actual editable text area */
-                TextView tips_view {
-                    css-classes : ["tips_view"];
-                    wrap-mode: word_char;
-                    top-margin: 12;
-                    bottom-margin: 12;
-                    left-margin: 12;
-                    right-margin: 12;
-                }
-        }
-        }
-        }
-}
-
-
-      Adw.StatusPage empty_state {
-        title: _("No Recipes");
-        description: _("Add your first recipe to get started");
-      }
-    };
   };
-};
-};
-};
 }
 
 
